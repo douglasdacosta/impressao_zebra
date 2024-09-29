@@ -70,35 +70,46 @@ def main():
         SENHA = config['API']['SENHA']
 
         resultado = consultar_horas_turno(TOKEN, LOGIN, SENHA, url)
-        
         if resultado:
             itens = json.loads(resultado)
             
+            # printer_ip = config['CONFIG']['ipimpressora']
+            # printer_port = config['CONFIG']['porta']
+            printer_name = config['CONFIG']['printer_name']
+                
             # Itera pelos itens retornados pela API
             for item in itens:
                 material = item['material']
                 fornecedor = item['fornecedor']
                 estoque_id = item['estoque_id']
+                qtde_etiqueta = item['qtde']
                 data = item['data']
+                if qtde_etiqueta % 2 != 0:
+                    qtde_etiqueta = qtde_etiqueta+1
 
-                # Endereço IP e porta da impressora Zebra
-                printer_ip = config['CONFIG']['ipimpressora']
-                printer_port = config['CONFIG']['porta']
-                printer_name = config['CONFIG']['printer_name']
-                # Comando ZPL para criar a etiqueta
-                zpl = f"""
-                ^XA
-                ^PW300
-                ^LL200
-                ^FO0,50^FB300,2,0,C^A0N,30,30^FD{material}\&^FS
-                ^FO0,90^FB300,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
-                ^FO0,120^FB300,2,0,C^A0N,30,20^FDID: {estoque_id} DATA: {data}\&^FS
-                ^XZ
-                """
+                qtde_etiqueta = qtde_etiqueta//2
 
-                # Enviar a etiqueta para a impressora
-                # send_zpl_to_printer(zpl, printer_ip, printer_port)
-                send_zpl_to_printer_windows(zpl, printer_name)
+                print('qtde_etiqueta')    
+                print(qtde_etiqueta)
+                #passa pela quantidade de etiqueta enviando o comando para a impressora
+                for i in range(qtde_etiqueta):
+                    # Comando ZPL para criar a etiqueta
+                    zpl = f"""
+^XA
+^PW800
+^LL100
+^FO0,20^FB380,1,0,C^A0N,30,30^FD{material}\&^FS
+^FO0,55^FB380,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
+^FO0,80^FB380,2,0,C^A0N,30,20^FDID: {estoque_id} DATA: {data}\&^FS
+^FO223,20^FB600,2,0,C^A0N,30,30^FD{material}\&^FS
+^FO223,55^FB600,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
+^FO223,80^FB600,2,0,C^A0N,30,20^FDID: {estoque_id} DATA: {data}\&^FS
+^XZ
+"""
+
+                    # Enviar a etiqueta para a impressora                    
+                    send_zpl_to_printer_windows(zpl, printer_name)
+
                 logging.info(f"Etiqueta para {material} enviada.")
         
         else:
