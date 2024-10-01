@@ -98,15 +98,15 @@ def main():
 ^XA
 ^PW800
 ^LL100
-^FO0,20^FB380,1,0,C^A0N,30,30^FD{material}\&^FS
-^FO0,55^FB380,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
-^FO0,80^FB380,2,0,C^A0N,30,20^FDID: {estoque_id} DATA: {data}\&^FS
-^FO223,20^FB600,2,0,C^A0N,30,30^FD{material}\&^FS
-^FO223,55^FB600,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
-^FO223,80^FB600,2,0,C^A0N,30,20^FDID: {estoque_id} DATA: {data}\&^FS
+^FO0,20^FB400,1,0,C^A0N,30,30^FD{material}\&^FS
+^FO0,55^FB400,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
+^FO0,80^FB400,2,0,C^A0N,30,20^FDLOTE: {estoque_id} {data}\&^FS
+^FO223,20^FB650,2,0,C^A0N,30,30^FD{material}\&^FS
+^FO223,55^FB650,2,0,C^A0N,20,20^FD{fornecedor}\&^FS
+^FO223,80^FB650,2,0,C^A0N,30,20^FDLOTE: {estoque_id} {data}\&^FS
 ^XZ
-"""
-
+"""                  
+                    
                     # Enviar a etiqueta para a impressora                    
                     send_zpl_to_printer_windows(zpl, printer_name)
 
